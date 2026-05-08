@@ -1,17 +1,17 @@
  const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const contactRoutes = require("../routes/contact");
-const signInRoutes = require("../routes/SignIn");
-const loginRoutes = require("../routes/Login");
-const adminRoutes = require("../routes/admin");
+const contactRoutes = require("../../routes/contact");
+const signInRoutes = require("../../routes/SignIn");
+const loginRoutes = require("../../routes/Login");
+const adminRoutes = require("../../routes/admin");
  
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const User = require("../Models/User");
+const User = require("../User");
  
 
 app.use("/api/contact", contactRoutes);
