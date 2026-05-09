@@ -15,9 +15,20 @@ const app = express();
 
 app.use(express.json());
 
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
+
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:5173",
+      "https://home-automation-ui-ruddy.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -175,8 +186,8 @@ app.delete("/api/users/:id", async (req, res) => {
 module.exports = app;
  
 
-const PORT = 5000;
+// const PORT = 5000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
-});
+// app.listen(PORT, "0.0.0.0", () => {
+//   console.log(`Server running on http://0.0.0.0:${PORT}`);
+// });
