@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const router = express.Router();
 const contactRoutes = require("../routes/contact");
 const signInRoutes = require("../routes/SignIn");
 const loginRoutes = require("../routes/Login");
@@ -153,6 +153,44 @@ app.get("/api/light/status", (req, res) => {
     success: true,
     status: lightStatus,
   });
+});
+
+// POST CONTACT FORM
+router.post("/contact", async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+
+    if (!name || !email || !subject || !message) {
+      return res.json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const newContact = new Contact({
+      name,
+      email,
+      subject,
+      message,
+    });
+
+    await newContact.save();
+
+    res.json({
+      success: true,
+      message: "Message sent successfully",
+    });
+
+  } catch (error) {
+
+    console.log("CONTACT ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+
+  }
 });
 
 // GET ALL USERS
