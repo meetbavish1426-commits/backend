@@ -39,11 +39,12 @@ app.use("/api/signin", signInRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/admin", adminRoutes);
 
-// MongoDB connection
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => console.log("MongoDB connected"))
-//   .catch((err) => console.log("MongoDB Error:", err));
+
+console.log("MONGO URI EXISTS:", !!process.env.MONGO_URI);
+console.log(
+  "MONGO URI START:",
+  process.env.MONGO_URI?.substring(0, 25)
+);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -52,6 +53,8 @@ mongoose
   .catch((err) => {
     console.log("❌ MongoDB Error:", err.message);
   });
+
+
 // SIGNUP API
 app.post("/signup", async (req, res) => {
   try {
@@ -195,19 +198,7 @@ router.post("/contact", async (req, res) => {
 
   }
 });
-
-// GET ALL USERS
-// app.get("/api/users", async (req, res) => {
-//   try {
-//     const users = await User.find();
-
-//     res.json(users);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error fetching users",
-//     });
-//   }
-// });
+ 
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
@@ -238,10 +229,3 @@ app.delete("/api/users/:id", async (req, res) => {
 });
 
 module.exports = app;
- 
-
-// const PORT = 5000;
-
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`Server running on http://0.0.0.0:${PORT}`);
-// });
