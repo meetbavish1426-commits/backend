@@ -44,12 +44,10 @@ app.use("/api/admin", adminRoutes);
 //   .connect(process.env.MONGO_URI)
 //   .then(() => console.log("MongoDB connected"))
 //   .catch((err) => console.log("MongoDB Error:", err));
-console.log("MONGO_URI EXISTS:", !!process.env.MONGO_URI);
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅ MongoDB connected");
+    console.log("✅ MongoDB connected successfully");
   })
   .catch((err) => {
     console.log("❌ MongoDB Error:", err.message);
