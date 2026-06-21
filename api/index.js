@@ -40,11 +40,20 @@ app.use("/api/login", loginRoutes);
 app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
+// mongoose
+//   .connect(process.env.MONGO_URI)
+//   .then(() => console.log("MongoDB connected"))
+//   .catch((err) => console.log("MongoDB Error:", err));
+console.log("MONGO_URI EXISTS:", !!process.env.MONGO_URI);
+
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log("MongoDB Error:", err));
-
+  .then(() => {
+    console.log("✅ MongoDB connected");
+  })
+  .catch((err) => {
+    console.log("❌ MongoDB Error:", err.message);
+  });
 // SIGNUP API
 app.post("/signup", async (req, res) => {
   try {
@@ -190,14 +199,27 @@ router.post("/contact", async (req, res) => {
 });
 
 // GET ALL USERS
+// app.get("/api/users", async (req, res) => {
+//   try {
+//     const users = await User.find();
+
+//     res.json(users);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error fetching users",
+//     });
+//   }
+// });
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
 
     res.json(users);
   } catch (error) {
+    console.log("USERS ERROR:", error);
+
     res.status(500).json({
-      message: "Error fetching users",
+      message: error.message,
     });
   }
 });
