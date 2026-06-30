@@ -1,4 +1,4 @@
- const express = require("express");
+const express = require("express");
 const router = express.Router();
 
 const Contact = require("../Models/Contact");
@@ -8,11 +8,11 @@ router.post("/", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    // validation
+    // Validation
     if (!name || !email || !subject || !message) {
-      return res.json({
+      return res.status(400).json({
         success: false,
-        message: "All fields are required"
+        message: "All fields are required",
       });
     }
 
@@ -20,47 +20,69 @@ router.post("/", async (req, res) => {
       name,
       email,
       subject,
-      message
+      message,
     });
 
     await newContact.save();
 
-    console.log("📩 New Contact:", newContact);
+    console.log("📩 New Contact Saved:", newContact);
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      message: "Message sent successfully"
+      message: "Message sent successfully",
+      contact: newContact,
     });
-
   } catch (error) {
-    console.log("Contact Error:", error);
+    console.error("❌ CONTACT ERROR:", error);
 
-    res.json({
+    return res.status(500).json({
       success: false,
-      message: "Server error"
+      message: error.message,
+      error: String(error),
     });
   }
 });
 
-// GET: All messages (admin use)
+// GET: All Contact Messages
 router.get("/", async (req, res) => {
-  const data = await Contact.find().sort({ createdAt: -1 });
-  res.json(data);
+  try {
+    const data = await Contact.find().sort({ createdAt: -1 });
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("❌ GET CONTACT ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      error: String(error),
+    });
+  }
 });
+
+// DELETE Contact Message
 router.delete("/:id", async (req, res) => {
   try {
-    await Contact.findByIdAndDelete(req.params.id);
+    const deleted = await Contact.findByIdAndDelete(req.params.id);
 
-    res.json({
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Message not found",
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      message: "Message deleted successfully"
+      message: "Message deleted successfully",
     });
   } catch (error) {
-    console.log("Delete Error:", error);
+    console.error("❌ DELETE CONTACT ERROR:", error);
 
-    res.json({
+    return res.status(500).json({
       success: false,
-      message: "Delete failed"
+      message: error.message,
+      error: String(error),
     });
   }
 });
