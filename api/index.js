@@ -17,17 +17,23 @@ app.use(express.json());
 
  
 
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://home-automation-ui-ruddy.vercel.app",
+//     ],
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://home-automation-ui-ruddy.vercel.app",
-    ],
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 // Test route
 app.get("/", (req, res) => {
   res.send("Backend is running successfully");
