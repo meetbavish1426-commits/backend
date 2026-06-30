@@ -51,14 +51,35 @@ console.log(
   "MONGO URI START:",
   process.env.MONGO_URI?.substring(0, 25)
 );
+// mongoose
+//   .connect(process.env.MONGO_URI)
+//   .then(() => {
+//     console.log("✅ MongoDB connected successfully");
+//   })
+//   .catch((err) => {
+//     console.log("❌ MongoDB Error:", err.message);
+//   });
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected successfully");
   })
   .catch((err) => {
-    console.log("❌ MongoDB Error:", err.message);
+    console.error("❌ MongoDB Connection Error");
+    console.error(err);
   });
+
+mongoose.connection.on("connected", () => {
+  console.log("🟢 Mongoose Connected");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log("🔴 Mongoose Error:", err);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("🟠 Mongoose Disconnected");
+});
 
 
 // SIGNUP API
@@ -165,6 +186,22 @@ app.get("/api/light/status", (req, res) => {
     success: true,
     status: lightStatus,
   });
+});
+
+app.get("/api/test-db", async (req, res) => {
+  try {
+    await mongoose.connection.db.admin().ping();
+
+    res.json({
+      success: true,
+      message: "MongoDB Connected",
+    });
+  } catch (err) {
+    res.json({
+      success: false,
+      error: err.message,
+    });
+  }
 });
 
 // POST CONTACT FORM
