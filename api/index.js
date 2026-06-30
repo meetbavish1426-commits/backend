@@ -39,6 +39,14 @@ app.get("/", (req, res) => {
   res.send("Backend is running successfully");
 });
 
+app.get("/api/test-db", (req, res) => {
+  res.json({
+    readyState: mongoose.connection.readyState,
+    mongoConnected: mongoose.connection.readyState === 1,
+    dbName: mongoose.connection.name || null,
+  });
+});
+
 // Routes
 app.use("/api/contact", contactRoutes);
 app.use("/api/signin", signInRoutes);
