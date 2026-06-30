@@ -44,6 +44,7 @@ app.get("/api/test-db", (req, res) => {
     readyState: mongoose.connection.readyState,
     mongoConnected: mongoose.connection.readyState === 1,
     dbName: mongoose.connection.name || null,
+    host: mongoose.connection.host || null,
   });
 });
 
@@ -59,35 +60,19 @@ console.log(
   "MONGO URI START:",
   process.env.MONGO_URI?.substring(0, 25)
 );
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => {
-//     console.log("✅ MongoDB connected successfully");
-//   })
-//   .catch((err) => {
-//     console.log("❌ MongoDB Error:", err.message);
-//   });
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 30000,
+  })
   .then(() => {
     console.log("✅ MongoDB connected successfully");
   })
   .catch((err) => {
     console.error("❌ MongoDB Connection Error");
-    console.error(err);
+    console.error("MESSAGE:", err.message);
+    console.error("NAME:", err.name);
+    console.error("STACK:", err.stack);
   });
-
-mongoose.connection.on("connected", () => {
-  console.log("🟢 Mongoose Connected");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.log("🔴 Mongoose Error:", err);
-});
-
-mongoose.connection.on("disconnected", () => {
-  console.log("🟠 Mongoose Disconnected");
-});
 
 
 // SIGNUP API
