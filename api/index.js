@@ -39,12 +39,11 @@ app.get("/", (req, res) => {
   res.send("Backend is running successfully");
 });
 
-app.get("/api/test-db", (req, res) => {
+app.get("/mongo-status", (req, res) => {
   res.json({
     readyState: mongoose.connection.readyState,
-    mongoConnected: mongoose.connection.readyState === 1,
-    dbName: mongoose.connection.name || null,
-    host: mongoose.connection.host || null,
+    dbName: mongoose.connection.name,
+    host: mongoose.connection.host,
   });
 });
 
