@@ -60,19 +60,30 @@ console.log(
   "MONGO URI START:",
   process.env.MONGO_URI?.substring(0, 25)
 );
-mongoose
-  .connect(process.env.MONGO_URI, {
-    serverSelectionTimeoutMS: 30000,
-  })
-  .then(() => {
-    console.log("✅ MongoDB connected successfully");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB Connection Error");
-    console.error("MESSAGE:", err.message);
-    console.error("NAME:", err.name);
-    console.error("STACK:", err.stack);
-  });
+// mongoose
+//   .connect(process.env.MONGO_URI, {
+//     serverSelectionTimeoutMS: 30000,
+//   })
+//   .then(() => {
+//     console.log("✅ MongoDB connected successfully");
+//   })
+//   .catch((err) => {
+//     console.error("❌ MongoDB Connection Error");
+//     console.error("MESSAGE:", err.message);
+//     console.error("NAME:", err.name);
+//     console.error("STACK:", err.stack);
+//   });
+mongoose.connect(process.env.MONGO_URI, {
+  family: 4,
+  serverSelectionTimeoutMS: 30000,
+})
+.then(() => {
+  console.log("✅ MongoDB connected successfully");
+})
+.catch((err) => {
+  console.error("❌ FULL MONGODB ERROR");
+  console.error(err);
+});
 
 
 // SIGNUP API
